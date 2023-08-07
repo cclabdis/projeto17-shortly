@@ -5,6 +5,7 @@ export async function getUser(req, res) {
 
     try {
         const user = await userQuery(user_id)
+        console.log(user)
         res.status(200).send(user.rows[0])
     } catch (err) {
         res.status(500).send(err.message)
