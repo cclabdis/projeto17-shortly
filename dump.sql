@@ -27,7 +27,8 @@ SET default_table_access_method = heap;
 CREATE TABLE public.link_views (
     id integer NOT NULL,
     link_id integer,
-    viewed_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+    viewed_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -61,7 +62,7 @@ CREATE TABLE public.links (
     short_url character varying(255) NOT NULL,
     original_url character varying(255) NOT NULL,
     visit_count integer DEFAULT 0,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     views integer DEFAULT 0
 );
 
@@ -94,7 +95,7 @@ CREATE TABLE public.tokens (
     token_id integer NOT NULL,
     user_id integer,
     token character varying(255) NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+    "createdAt" timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -127,7 +128,7 @@ CREATE TABLE public.users (
     name character varying(255) NOT NULL,
     email character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+    "createdAt" timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
