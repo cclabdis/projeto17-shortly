@@ -12,9 +12,9 @@ export async function postShorten(req, res) {
         const result = await shortenQuery(user_id, shortUrl, url)
 
         res.status(201)
-            .send({id: result.rows[0].url_id, shortUrl });
+            .send({id: result.rows[0].url_id, shortUrl })
     } catch (err) {
-        res.status(500).send(err.message);
+        res.status(500).send(err.message)
     }
 }
 
@@ -23,12 +23,12 @@ export async function getShorten(req, res) {
 
     try {
         const url = await getUrls(id)
-            if (url.rowCount === 0) return res.sendStatus(404);
+            if (url.rowCount === 0) return res.sendStatus(404)
         const urlId = url.rows[0]
 
         res.status(200).send({
             id,
-            short: urlId.short_url,
+            shortUrl: urlId.short_url,
             url: urlId.original_url
         });
 
