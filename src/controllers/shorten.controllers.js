@@ -19,7 +19,7 @@ export async function postShorten(req, res) {
 }
 
 export async function getShorten(req, res) {
-    const { id } = req.params;
+    const { id } = req.params
 
     try {
         const url = await getUrls(id)
@@ -28,7 +28,7 @@ export async function getShorten(req, res) {
 
         res.status(200).send({
             id,
-            shortUrl: urlId.short_url,
+            short: urlId.short_url,
             url: urlId.original_url
         });
 
