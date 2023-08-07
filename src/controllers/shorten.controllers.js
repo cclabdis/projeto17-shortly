@@ -3,17 +3,16 @@ import { deleteId, getUrls, redirectOriginalUrl, shortenQuery } from "../reposit
 
 
 export async function postShorten(req, res) {
-    const { url } = req.body;
-    const { user_id } = res.locals.session;
+    const { url } = req.body
+    const { user_id } = res.locals.session
 
     const short = nanoid(8);
 
     try {
         const result = await shortenQuery(user_id, short, url)
-        const id = result.rows[0].url_id
 
         res.status(201)
-            .send({id: id, short });
+            .send({id: result.rows[0].url_id, short });
     } catch (err) {
         res.status(500).send(err.message);
     }
