@@ -2,7 +2,7 @@ import { acessToken } from "../repositories/user.repositories.js"
 
 
 export async function validateToken(req, res, next) {
-  const { authorization } = req.headers;
+  const { authorization } = req.headers
 
   try{
   const token = authorization?.replace("Bearer ", "")
