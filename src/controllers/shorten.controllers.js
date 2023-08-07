@@ -6,13 +6,13 @@ export async function postShorten(req, res) {
     const { url } = req.body
     const { user_id } = res.locals.token
 
-    const short = nanoid(8);
+    const shortUrl = nanoid(8);
 
     try {
-        const result = await shortenQuery(user_id, short, url)
+        const result = await shortenQuery(user_id, shortUrl, url)
 
         res.status(201)
-            .send({id: result.rows[0].url_id, short });
+            .send({id: result.rows[0].url_id, shortUrl });
     } catch (err) {
         res.status(500).send(err.message);
     }
