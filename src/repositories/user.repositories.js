@@ -8,9 +8,9 @@ export async function userQuery(user_id){
             users.name,
             SUM(links.visit_count) AS "visitCount",
             json_agg(json_build_object(
-            'id', urls.url_id,
+            'id', links.url_id,
             'shortUrl', links.short_url,
-            'url', urls.original_url,
+            'url', links.original_url,
             'visitCount', links.visit_count
             )) AS "shortenedUrls"
         FROM
