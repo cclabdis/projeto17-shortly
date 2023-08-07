@@ -1,0 +1,30 @@
+CREATE TABLE users (
+  user_id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE links (
+  url_id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(user_id),
+  short_url VARCHAR(255) NOT NULL UNIQUE,
+  original_url VARCHAR(255) NOT NULL,
+  visit_count INTEGER DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  views INT DEFAULT 0
+);
+
+CREATE TABLE tokens (
+  token_id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(user_id),
+  token VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE link_views (
+    id SERIAL PRIMARY KEY,
+    link_id INT REFERENCES links(url_id),
+    viewed_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
