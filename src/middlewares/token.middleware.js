@@ -3,6 +3,8 @@ import { acessToken } from "../repositories/user.repositories.js"
 
 export async function validateToken(req, res, next) {
   const { authorization } = req.headers;
+
+  try{
   const token = authorization?.replace("Bearer ", "")
   const check = await acessToken(token)
 
@@ -12,5 +14,7 @@ export async function validateToken(req, res, next) {
   res.locals.token = token;
 
   next()
-
+  } catch (err) {
+    res.status(500).send(err.message);
+}
 }
