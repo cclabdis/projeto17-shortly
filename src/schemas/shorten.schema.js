@@ -1,7 +1,7 @@
 import joi from "joi";
 
 const shortenSchema = joi.object({
-  url: joi.tring().uri().required()
+  url: joi.string().uri().required()
 });
 
 export default shortenSchema

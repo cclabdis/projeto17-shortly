@@ -1,43 +1,36 @@
-import { db } from "../database/database.connections.js";
-import { nanoid } from "nanoid";
+import { nanoid } from "nanoid"
+import { deleteId, getUrls, redirectOriginalUrl, shortenQuery } from "../repositories/shorten.repositories.js"
 
-export async function shorten(req, res) {
+
+export async function postShorten(req, res) {
     const { url } = req.body;
     const { user_id } = res.locals.session;
 
-    const shortUrl = nanoid(8);
+    const short = nanoid(8);
 
     try {
-
-        const result = await db.query(`
-            INSERT INTO urls (user_id, short_url, original_url, visit_count)
-                VALUES ($1, $2, $3, $4)
-                RETURNING url_id;
-        `, [user_id, shortUrl, url, 0]);
+        const result = await shortenQuery(user_id, short, url)
+        const id = result.rows[0].url_id
 
         res.status(201)
-            .send({
-                id: result.rows[0].url_id,
-                shortUrl
-            });
+            .send({id: id, short });
     } catch (err) {
         res.status(500).send(err.message);
     }
 }
 
-export async function getUrlById(req, res) {
+export async function getShorten(req, res) {
     const { id } = req.params;
 
     try {
-        const url = await db.query(`
-        SELECT * FROM urls WHERE url_id = $1
-          `, [id]);
-        if (url.rowCount === 0) return res.sendStatus(404);
+        const url = await getUrls(id)
+            if (url.rowCount === 0) return res.sendStatus(404);
+        const urlId = url.rows[0]
 
         res.status(200).send({
             id,
-            shortUrl: url.rows[0].short_url,
-            url: url.rows[0].original_url
+            shortUrl: urlId.short_url,
+            url: urlId.original_url
         });
 
     } catch (err) {
@@ -48,16 +41,11 @@ export async function getUrlById(req, res) {
 export async function redirect(req, res) {
     const { shortUrl } = req.params;
 
-    try {
-        const url = await db.query(`
-        UPDATE urls 
-        SET visit_count = visit_count + 1
-        WHERE short_url = $1
-        RETURNING original_url;
-          `, [shortUrl]);
-        if (url.rowCount === 0) return res.sendStatus(404);
+    try { 
+        const url = await redirectOriginalUrl(shortUrl)
+        if (url.rowCount === 0) return res.sendStatus(404)
 
-        const originalUrl = url.rows[0].original_url;
+        const originalUrl = url.rows[0].original_url
         res.redirect(originalUrl);
 
     } catch (err) {
@@ -65,23 +53,18 @@ export async function redirect(req, res) {
     }
 }
 
-export async function deleteUrlById(req, res) {
+export async function deleteUrl(req, res) {
 
     const { id } = req.params;
     const { user_id } = res.locals.session;
 
     try {
-        const url = await db.query(`
-        SELECT * FROM urls WHERE url_id = $1;
-          `, [id]);
-
+        const url = await getUrls(id)
         if (url.rowCount === 0) return res.sendStatus(404);
 
         if (url.rows[0].user_id !== user_id) return res.sendStatus(401);
 
-        await db.query(`
-        DELETE FROM urls WHERE url_id = $1;
-          `, [id]);
+        await deleteId(id)
         res.sendStatus(204);
 
     } catch (err) {
