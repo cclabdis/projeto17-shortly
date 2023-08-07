@@ -6,16 +6,16 @@ export async function userQuery(user_id){
         SELECT
             users.user_id AS id,
             users.name,
-            SUM(urls.visit_count) AS "visitCount",
+            SUM(links.visit_count) AS "visitCount",
             json_agg(json_build_object(
             'id', urls.url_id,
-            'shortUrl', urls.short_url,
+            'shortUrl', links.short_url,
             'url', urls.original_url,
-            'visitCount', urls.visit_count
+            'visitCount', links.visit_count
             )) AS "shortenedUrls"
         FROM
             users
-        INNER JOIN urls ON users.user_id = urls.user_id
+        INNER JOIN links ON users.user_id = links.user_id
         WHERE
             users.user_id = $1
         GROUP BY
