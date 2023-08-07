@@ -1,11 +1,11 @@
 import { db } from "../database/database.connection.js"
 
-export async function shortenQuery(user_id, short, url) {
+export async function shortenQuery(user_id, shortUrl, url) {
     return db.query(`
             INSERT INTO links (user_id, short_url, original_url, visit_count)
                 VALUES ($1, $2, $3, $4)
                 RETURNING url_id;
-        `, [user_id, short, url, 0]);
+        `, [user_id, shortUrl, url, 0]);
 }
 
 export async function getUrls(id) {
