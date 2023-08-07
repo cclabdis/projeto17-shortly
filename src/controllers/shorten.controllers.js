@@ -33,12 +33,12 @@ export async function getShorten(req, res) {
         });
 
     } catch (err) {
-        res.status(500).send(err.message);
+        res.status(500).send(err.message)
     }
 }
 
 export async function redirect(req, res) {
-    const { shortUrl } = req.params;
+    const { shortUrl } = req.params
 
     try { 
         const url = await redirectOriginalUrl(shortUrl)
@@ -48,14 +48,14 @@ export async function redirect(req, res) {
         res.redirect(originalUrl);
 
     } catch (err) {
-        res.status(500).send(err.message);
+        res.status(500).send(err.message)
     }
 }
 
 export async function deleteUrl(req, res) {
 
-    const { id } = req.params;
-    const { user_id } = res.locals.session;
+    const { id } = req.params
+    const { user_id } = res.locals.token
 
     try {
         const url = await getUrls(id)

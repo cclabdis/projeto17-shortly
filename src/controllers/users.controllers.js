@@ -1,7 +1,7 @@
 import { userQuery } from "../repositories/user.repositories.js"
 
 export async function getUser(req, res) {
-    const { user_id } = res.locals.session
+    const { user_id } = res.locals.token
 
     try {
         const user = await userQuery(user_id)
