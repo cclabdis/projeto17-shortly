@@ -4,7 +4,7 @@ import { deleteId, getUrls, redirectOriginalUrl, shortenQuery } from "../reposit
 
 export async function postShorten(req, res) {
     const { url } = req.body
-    const { user_id } = res.locals.session
+    const { user_id } = res.locals.token
 
     const short = nanoid(8);
 
